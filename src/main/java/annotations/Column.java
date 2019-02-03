@@ -8,8 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * column name in database table
  *
- * @author  Reza Eskandari
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

@@ -8,11 +8,9 @@ public class Main {
         Session session = new Session();
 
         session.beginTransaction();
-        User user = (User) session.get(User.class, 21);
-        session.delete(user);
-        session.findAll(User.class).stream().forEach(userObject ->{
-            System.out.println(userObject);
-        });
+
+        User user = (User) session.get(User.class,3);
+        session.update(user);
         session.commit();
     }
 }

@@ -164,7 +164,7 @@ public abstract class SessionInterfaceImpl implements SessionInterface {
                     }
                 }
             }
-            QueryUtil.RemoveCommaFromQueryEnd(query);
+            query = QueryUtil.RemoveCommaFromQueryEnd(query);
             query += " WHERE " + idColumn + " = " + oid;
             try {
                 statement = connection.prepareStatement(query);
@@ -188,6 +188,7 @@ public abstract class SessionInterfaceImpl implements SessionInterface {
      */
     public Object get(Class clazz, Object id) {
         Object object = null;
+        int userCount = 0;
         try {
             object = clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
@@ -212,6 +213,7 @@ public abstract class SessionInterfaceImpl implements SessionInterface {
                 statement = connection.prepareStatement(query);
                 resultSet = statement.executeQuery();
                 while (resultSet.next()) {
+                    userCount++;
                     for (Field field : fields) {
                         field.setAccessible(true);
                         Column column = field.getDeclaredAnnotation(Column.class);
@@ -239,10 +241,14 @@ public abstract class SessionInterfaceImpl implements SessionInterface {
             } catch (SQLException | IllegalAccessException e) {
                 e.printStackTrace();
             }
+            if (userCount == 0) {
+                throw new NullPointerException("user not found");
+            }
             return object;
         } else {
             throw new NullPointerException("not found");
         }
+
     }
 
 

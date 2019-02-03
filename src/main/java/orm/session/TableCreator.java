@@ -1,9 +1,11 @@
-package orm;
+package orm.session;
 
-import annotations.Column;
-import annotations.Id;
-import annotations.Table;
-import databse.DatabaseConnection;
+import orm.annotations.Column;
+import orm.annotations.Id;
+import orm.annotations.Table;
+import orm.databse.DatabaseConnection;
+import orm.interfaces.TableCreatorInterface;
+import orm.utils.QueryUtil;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -12,8 +14,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class TableCreator {
+/**
+ * create database table per input object in create method
+ *
+ * @author Reza Eskandari
+ */
+public class TableCreator implements TableCreatorInterface {
     public void create(Object object) {
+        //initial database connection
         DatabaseConnection databaseConnection = DatabaseConnection.getNewInstance();
         Connection connection = null;
         try {
@@ -21,6 +29,7 @@ public class TableCreator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //read table name from object in table annotation
         Table table = object.getClass().getDeclaredAnnotation(Table.class);
         String query = "CREATE TABLE IF NOT EXISTS " + table.name() + " (";
         Field[] fields = object.getClass().getDeclaredFields();
@@ -29,22 +38,20 @@ public class TableCreator {
             for (Annotation annotation : annotations) {
                 if (annotation instanceof Column) {
                     Column column = field.getAnnotation(Column.class);
-                    query += column.name() +" "+ column.dataType() + "(" + column.size() + ")";
+                    query += column.name() + " " + column.dataType() + "(" + column.size() + ")";
                     Id id = field.getDeclaredAnnotation(Id.class);
-                    if (id!=null){
-                        if (id.autoIncrement()){
-                            query+="NOT NULL PRIMARY KEY AUTO_INCREMENT";
-                        }else {
-                            query+="NOT NULL PRIMARY KEY";
+                    if (id != null) {
+                        if (id.autoIncrement()) {
+                            query += "NOT NULL PRIMARY KEY AUTO_INCREMENT";
+                        } else {
+                            query += "NOT NULL PRIMARY KEY";
                         }
                     }
-                    query+=",";
+                    query += ",";
                 }
             }
         }
-        if (query.trim().endsWith(",")) {
-            query = query.substring(0, query.length() - 1);
-        }
+        QueryUtil.RemoveCommaFromQueryEnd(query);
         query += ");";
         try {
             PreparedStatement statement = connection.prepareStatement(query);

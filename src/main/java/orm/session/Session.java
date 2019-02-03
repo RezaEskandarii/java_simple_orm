@@ -1,18 +1,14 @@
-package orm;
+package orm.session;
 
-import annotations.Column;
-import annotations.Entity;
-import annotations.Id;
-import annotations.Table;
-import com.sun.xml.internal.bind.v2.model.core.ID;
-import databse.DatabaseConnection;
-import enums.DataType;
-import exception.EntityException;
-import utils.AnnotationUtil;
+import orm.annotations.Column;
+import orm.annotations.Entity;
+import orm.annotations.Id;
+import orm.annotations.Table;
+import orm.databse.DatabaseConnection;
+import orm.exception.EntityException;
+import orm.utils.AnnotationUtil;
 
-import javax.jws.Oneway;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +16,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class Session {
     private DatabaseConnection databaseConnection = null;

@@ -1,4 +1,4 @@
-package annotations;
+package orm.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * describe table name in database per object
+ * this annotation is for create primary key and identity
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Table {
-    public String name();
+@Target(ElementType.FIELD)
+public @interface Id {
+    public boolean autoIncrement() default true;
 }

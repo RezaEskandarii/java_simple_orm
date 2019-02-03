@@ -1,7 +1,6 @@
-package utils;
+package orm.utils;
 
-import annotations.Entity;
-import exception.EntityException;
+import orm.annotations.Entity;
 
 public class AnnotationUtil {
     public static boolean EntityAnnotationDeclared(Object object) {

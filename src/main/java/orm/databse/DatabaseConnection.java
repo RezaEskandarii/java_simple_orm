@@ -1,14 +1,18 @@
-package databse;
+package orm.databse;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * singleton class to connect to database
+ *
+ * @author Reza Eskandari
+ */
 public class DatabaseConnection {
     private String dbDriver;
 
@@ -26,7 +30,9 @@ public class DatabaseConnection {
     private static DatabaseConnection databaseConnection = null;
 
     public Connection getConnection() throws IOException {
-        File file = new File("src\\main\\resources\\application.properties");
+        //Configuration database connection is stored in this file
+        String src = "src\\main\\resources\\application.properties";
+        File file = new File(src);
         Properties properties = new Properties();
         properties.load(new FileInputStream(file));
         this.dbDriver = properties.getProperty("com.setting.db_driver");
@@ -41,6 +47,10 @@ public class DatabaseConnection {
         return connection;
     }
 
+    /**
+     * @return DatabaseConnection singleton instance
+     * @singleton
+     */
     public static DatabaseConnection getNewInstance() {
         if (databaseConnection == null) {
             synchronized (DatabaseConnection.class) {

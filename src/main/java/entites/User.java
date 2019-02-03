@@ -1,10 +1,10 @@
 package entites;
 
-import annotations.Column;
-import annotations.Entity;
-import annotations.Id;
-import annotations.Table;
-import enums.DataType;
+import orm.annotations.Column;
+import orm.annotations.Entity;
+import orm.annotations.Id;
+import orm.annotations.Table;
+import orm.enums.DataType;
 
 @Table(name = "user_tbl")
 @Entity

@@ -1,6 +1,6 @@
-package annotations;
+package orm.annotations;
 
-import enums.DataType;
+import orm.enums.DataType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

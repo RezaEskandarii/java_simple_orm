@@ -1,9 +1,9 @@
 package entites;
 
-import annotations.Column;
-import annotations.Id;
-import annotations.Table;
-import enums.DataType;
+import orm.annotations.Column;
+import orm.annotations.Id;
+import orm.annotations.Table;
+import orm.enums.DataType;
 
 @Table(name = "PRODUCTS_TBL")
 public class Product {

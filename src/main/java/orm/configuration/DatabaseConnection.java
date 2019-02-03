@@ -1,4 +1,4 @@
-package orm.databse;
+package orm.configuration;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,7 +22,10 @@ public class DatabaseConnection {
 
     private String dbUrl;
 
+    private ProjectConfig projectConfig;
+
     private DatabaseConnection() {
+        this.projectConfig = new ProjectConfig();
     }
 
     private Connection connection;
@@ -30,15 +33,10 @@ public class DatabaseConnection {
     private static DatabaseConnection databaseConnection = null;
 
     public Connection getConnection() throws IOException {
-        //Configuration database connection is stored in this file
-        String src = "src\\main\\resources\\application.properties";
-        File file = new File(src);
-        Properties properties = new Properties();
-        properties.load(new FileInputStream(file));
-        this.dbDriver = properties.getProperty("com.setting.db_driver");
-        this.dbPass = properties.getProperty("com.setting.db_pass");
-        this.dbUser = properties.getProperty("com.settings.db_user");
-        this.dbUrl = properties.getProperty("com.setting.db_url");
+        this.dbDriver = projectConfig.getDatabaseDriver();
+        this.dbPass = projectConfig.getDatabasePassword();
+        this.dbUser = projectConfig.getDatabaseUsername();
+        this.dbUrl = projectConfig.getDatabaseUrl();
         try {
             connection = DriverManager.getConnection(this.dbUrl, this.dbUser, this.dbPass);
         } catch (SQLException e) {

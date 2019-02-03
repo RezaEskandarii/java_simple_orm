@@ -3,7 +3,8 @@ package orm.session;
 import orm.annotations.Column;
 import orm.annotations.Id;
 import orm.annotations.Table;
-import orm.databse.DatabaseConnection;
+import orm.configuration.DatabaseConnection;
+import orm.configuration.ProjectConfig;
 import orm.interfaces.TableCreatorInterface;
 import orm.utils.QueryUtil;
 
@@ -20,7 +21,14 @@ import java.sql.SQLException;
  * @author Reza Eskandari
  */
 public class TableCreator implements TableCreatorInterface {
-    public void create(Object object) {
+    private ProjectConfig projectConfig;
+
+    public TableCreator() {
+        projectConfig = new ProjectConfig();
+    }
+
+    public void create(Class object) {
+
         //initial database connection
         DatabaseConnection databaseConnection = DatabaseConnection.getNewInstance();
         Connection connection = null;
@@ -30,9 +38,9 @@ public class TableCreator implements TableCreatorInterface {
             e.printStackTrace();
         }
         //read table name from object in table annotation
-        Table table = object.getClass().getDeclaredAnnotation(Table.class);
+        Table table = (Table) object.getDeclaredAnnotation(Table.class);
         String query = "CREATE TABLE IF NOT EXISTS " + table.name() + " (";
-        Field[] fields = object.getClass().getDeclaredFields();
+        Field[] fields = object.getDeclaredFields();
         for (Field field : fields) {
             Annotation[] annotations = field.getDeclaredAnnotations();
             for (Annotation annotation : annotations) {
@@ -51,11 +59,13 @@ public class TableCreator implements TableCreatorInterface {
                 }
             }
         }
-        QueryUtil.RemoveCommaFromQueryEnd(query);
+        query = QueryUtil.RemoveCommaFromQueryEnd(query);
         query += ");";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
-            System.out.println(query);
+            if (projectConfig.isSqlTraceEnable()) {
+                System.out.println(query);
+            }
             statement.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

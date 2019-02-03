@@ -10,7 +10,7 @@ public interface SessionInterface {
 
     public Object get(Class clazz, Object id);
 
-    public List<Object> findAll();
+    public List<Object> findAll(Class clazz);
 
     public void beginTransaction();
 

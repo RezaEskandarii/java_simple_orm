@@ -8,6 +8,7 @@ import orm.configuration.DatabaseConnection;
 import orm.configuration.ProjectConfig;
 import orm.exception.EntityException;
 import orm.interfaces.SessionInterface;
+import orm.session.TableCreator;
 import orm.utils.AnnotationUtil;
 import orm.utils.QueryUtil;
 
@@ -31,9 +32,11 @@ public abstract class SessionInterfaceImpl implements SessionInterface {
     private Connection connection = null;
     private PreparedStatement statement;
     private ProjectConfig projectConfig;
+    TableCreator tableCreator;
 
     public SessionInterfaceImpl() {
         this.projectConfig = new ProjectConfig();
+        tableCreator = new TableCreator();
     }
 
     /**
@@ -79,6 +82,9 @@ public abstract class SessionInterfaceImpl implements SessionInterface {
      * @param object
      */
     public void save(Object object) {
+        if (projectConfig.getDdl().equalsIgnoreCase("create")) {
+            tableCreator.create(object.getClass());
+        }
         if (AnnotationUtil.EntityAnnotationDeclared(object)) {
             String query = "INSERT INTO ";
             Table table = (Table) object.getClass().getDeclaredAnnotation(Table.class);
@@ -402,5 +408,6 @@ public abstract class SessionInterfaceImpl implements SessionInterface {
                 e.printStackTrace();
             }
         }
+
     }
 }

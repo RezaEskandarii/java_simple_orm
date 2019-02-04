@@ -12,6 +12,7 @@ public class ProjectConfig {
     private String databasePassword;
     private String databaseName;
     private String databaseDriver;
+    private String ddl;
     private boolean sqlTraceEnable;
 
     public ProjectConfig() {
@@ -20,11 +21,12 @@ public class ProjectConfig {
         Properties properties = new Properties();
         try {
             properties.load(new FileInputStream(file));
-            this.databaseUrl = (String) properties.get("com.setting.db_url");
-            this.databaseUsername = (String) properties.get("com.settings.db_user");
-            this.databasePassword = (String) properties.get("com.setting.db_pass");
-            this.databaseName = (String) properties.get("com.setting.db_url");
-            this.databaseDriver = (String) properties.get("com.setting.db_driver");
+            this.databaseUrl = String.valueOf(properties.get("com.setting.db_url"));
+            this.databaseUsername = String.valueOf(properties.get("com.settings.db_user"));
+            this.databasePassword = String.valueOf(properties.get("com.setting.db_pass"));
+            this.databaseName = String.valueOf(properties.get("com.setting.db_url"));
+            this.databaseDriver = String.valueOf(properties.get("com.setting.db_driver"));
+            this.ddl = String.valueOf(properties.get("com.setting.ddl"));
             this.sqlTraceEnable = Boolean.parseBoolean((String) properties.get("com.setting.show_sql"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,5 +55,9 @@ public class ProjectConfig {
 
     public boolean isSqlTraceEnable() {
         return sqlTraceEnable;
+    }
+
+    public String getDdl() {
+        return ddl;
     }
 }

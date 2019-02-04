@@ -75,4 +75,11 @@ public class SessionTest {
         assertTrue(user instanceof User);
         assertEquals(user.getId(), 3);
     }
+
+    @Test
+    public void sessionCanClosed() {
+        session.close();
+        session.beginTransaction();
+        assertNull(session.get(User.class,3));
+    }
 }

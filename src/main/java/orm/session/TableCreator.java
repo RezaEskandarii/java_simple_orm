@@ -39,6 +39,7 @@ public class TableCreator implements TableCreatorInterface {
         }
         //read table name from object in table annotation
         Table table = (Table) object.getDeclaredAnnotation(Table.class);
+        String dropQuery = String.format("%s  %s ", "DROP TABLE IF EXISTS ", table.name());
         String query = "CREATE TABLE IF NOT EXISTS " + table.name() + " (";
         Field[] fields = object.getDeclaredFields();
         for (Field field : fields) {
@@ -62,10 +63,14 @@ public class TableCreator implements TableCreatorInterface {
         query = QueryUtil.RemoveCommaFromQueryEnd(query);
         query += ");";
         try {
+            assert connection != null;
             PreparedStatement statement = connection.prepareStatement(query);
+            PreparedStatement drpQueryStatement = connection.prepareStatement(dropQuery);
             if (projectConfig.isSqlTraceEnable()) {
+                System.out.println(dropQuery);
                 System.out.println(query);
             }
+            drpQueryStatement.execute();
             statement.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

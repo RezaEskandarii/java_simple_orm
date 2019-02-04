@@ -8,3 +8,6 @@
 	- com.setting.db_driver=com.mysql.jdbc.Driver
 	- com.setting.show_sql=true
 	- com.setting.ddl=update 
+### If com.setting.dll is set to create, each time the object is saved in session, the entire table will be erased and rebuilt.
+If we put it equal to the update, the table will not be deleted and only new objects will be saved.
+Set the com.setting.dll equal to create the first instance of the Session class save method so that the entity equivalent will create a table in the database.

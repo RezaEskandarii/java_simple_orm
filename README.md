@@ -1,5 +1,9 @@
 ### this project is simple java orm for create and manage java objects in database by reflection and jdbc tecnology
-
+simple orm can...
+    Create tables from your Java classes.
+    Create columns from fields of your Java classes by @Column annotation.
+    Work with MySql .
+   
 --The project configuration file is located in the directory src / main / resources / application.properties
 + In this file you can perform the following configurations
 	- com.settings.db_user=your database username
